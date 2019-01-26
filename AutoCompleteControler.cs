@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 
 namespace WPFUserControl
@@ -35,20 +36,24 @@ namespace WPFUserControl
         private ListBox _lbAutoComplete;
         private Run _runEnteredText;
         private Run _runAutoCompleteText;
+        Popup _listBoxPopUp;
+
         private object _autocompletedObject;
         private bool _tabPressed;
+
 
         public int AutoCompletePosition { get => _autoCompletePosition; set => _autoCompletePosition = value; }
         public AutoCompleteTextBox _actb;
         #endregion
 
         #region constructors
-        public AutoCompleteControler(RichTextBox richTextBox, ListBox listBox, Run runEnteredText, Run runAutoCompleteText, AutoCompleteTextBox actb)
+        public AutoCompleteControler(RichTextBox richTextBox, ListBox listBox, Run runEnteredText, Run runAutoCompleteText, Popup listBoxPopUp, AutoCompleteTextBox actb)
         {
             _richTextBox = richTextBox;
             _lbAutoComplete = listBox;
             _runEnteredText = runEnteredText;
             _runAutoCompleteText = runAutoCompleteText;
+            _listBoxPopUp = listBoxPopUp;
 
             // since the "ListBoxReadOnly"-property is set only "OnApplyTemplate()", the value is not up to date during the contractor
             // therefore the whole usercontrol needs to be shared with the controler
@@ -81,7 +86,8 @@ namespace WPFUserControl
             _runEnteredText.Text = _textEntered;
 
             // show or hide list box depending on autocomplete entries
-            _lbAutoComplete.Visibility = foundObject.Count > 0 ? Visibility.Visible : Visibility.Hidden;
+            //_lbAutoComplete.Visibility = foundObject.Count > 0 ? Visibility.Visible : Visibility.Hidden;
+            ChangeVisiblity(foundObject.Count > 0 ? Visibility.Visible : Visibility.Hidden);
 
             // text was found to autocomplete
             if (foundObject.Count > 0)
@@ -330,7 +336,8 @@ namespace WPFUserControl
 
                 // hide and clear the listbox
                 _lbAutoComplete.Items.Clear();
-                _lbAutoComplete.Visibility = Visibility.Hidden;
+                //_lbAutoComplete.Visibility = Visibility.Hidden;
+                ChangeVisiblity(Visibility.Hidden);
 
                 // autocomplete sucessfull
                 autoCompleteDone = true;
@@ -359,7 +366,8 @@ namespace WPFUserControl
 
             // hide and clear the listbox
             _lbAutoComplete.Items.Clear();
-            _lbAutoComplete.Visibility = Visibility.Hidden;
+            //_lbAutoComplete.Visibility = Visibility.Hidden;
+            ChangeVisiblity(Visibility.Hidden);
 
             // reset the autocomplete position
             _autoCompletePosition = -1;
@@ -423,7 +431,8 @@ namespace WPFUserControl
 
             // hide and clear the listbox
             _lbAutoComplete.Items.Clear();
-            _lbAutoComplete.Visibility = Visibility.Hidden;
+            //_lbAutoComplete.Visibility = Visibility.Hidden;
+            ChangeVisiblity(Visibility.Hidden);
 
             // reset the autocomplete position
             _autoCompletePosition = -1;
@@ -533,7 +542,8 @@ namespace WPFUserControl
         private void ShowFullList()
         {
             // show the listbox
-            _lbAutoComplete.Visibility = Visibility.Visible;
+            //_lbAutoComplete.Visibility = Visibility.Visible;
+            ChangeVisiblity(Visibility.Visible);
 
             // position if first entry
             AutoCompletePosition = 0;
@@ -642,6 +652,13 @@ namespace WPFUserControl
         internal string GetCurrentText()
         {
             return new TextRange(_richTextBox.Document.ContentStart, _richTextBox.Document.ContentEnd).Text.TrimEnd('\r', '\n');
+        }
+
+        private void ChangeVisiblity(Visibility visibility)
+        {
+            // workaround since it looks like the visblity event is not fired always
+            _lbAutoComplete.Visibility = visibility;
+            _listBoxPopUp.IsOpen = (visibility == Visibility.Visible);
         }
         #endregion
     }

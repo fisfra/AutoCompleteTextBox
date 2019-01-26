@@ -97,7 +97,7 @@ namespace WPFUserControl
             runAutocompleteText.Background = autoCompleteBackground;
             rtbText.CaretBrush = cursorColor;
 
-            _acControler = new AutoCompleteControler(rtbText, lbAutoComplete, runEnteredText, runAutocompleteText, this);
+            _acControler = new AutoCompleteControler(rtbText, lbAutoComplete, runEnteredText, runAutocompleteText, ListBoxPopUp, this);
 
             _acControler.ObjectChanged += _acControler_ObjectChanged;
             _acControler.Leaving += _acControler_Leaving;
@@ -329,8 +329,10 @@ namespace WPFUserControl
 
         private void LbAutoComplete_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            Console.WriteLine("*** LbAutoComplete_IsVisibleChanged " + lbAutoComplete.Visibility.ToString());
+
             // popup ensures that the ListBox is on top of other UI Elements
-            ListBoxPopUp.IsOpen = lbAutoComplete.Visibility == Visibility.Visible;
+            //ListBoxPopUp.IsOpen = lbAutoComplete.Visibility == Visibility.Visible;
         }
     }
 }
