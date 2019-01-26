@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="WPFUserControl.AutoCompleteTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUserControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="25" d:DesignWidth="100"  Width="{Binding Path=AutoCompleteWidth, ElementName=LayoutRoot}"
+             x:Name="LayoutRoot">
+
+    <Grid>
+
+        <RichTextBox x:Name="rtbText" HorizontalAlignment="Left" Height="{Binding Path=AutoCompleteTextBoxHeight, ElementName=LayoutRoot}" VerticalAlignment="Top" 
+                     PreviewTextInput="rtbText_PreviewTextInput" PreviewKeyDown="rtbText_PreviewKeyDown" AcceptsReturn="False" Width="{Binding Path=AutoCompleteWidth, ElementName=LayoutRoot}" 
+                     TabIndex="{Binding Path=TabIndex, RelativeSource={RelativeSource AncestorType={x:Type local:AutoCompleteTextBox}}}">
+            <FlowDocument>
+                <Paragraph x:Name="paragraph" Margin="0">
+                    <Run x:Name="runEnteredText"/><Run x:Name="runAutocompleteText"/> <!-- both Run-Tags have to be in one line in the XAML to avoid spaces in the output! -->
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
+        <DockPanel>
+            <!-- Popup ensure that ListBox is on top of other UI Elements -->
+            <Popup Name="ListBoxPopUp" IsOpen="True" PlacementTarget="{Binding ElementName = rtbText }" Placement="Bottom" AllowsTransparency = "True" PopupAnimation = "Slide">
+                <ListBox x:Name="lbAutoComplete" HorizontalAlignment="Stretch" Height="100" Margin="0,22,0,0" VerticalAlignment="Top" Visibility="Hidden" SelectionChanged="lbAutoComplete_SelectionChanged"
+                     PreviewKeyDown="lbAutoComplete_PreviewKeyDown" Width="{Binding Path=AutoCompleteWidth, ElementName=LayoutRoot}" DockPanel.Dock="Left" IsVisibleChanged="LbAutoComplete_IsVisibleChanged"/>
+            </Popup>
+        </DockPanel>
+        <!-- DockPanel with DockPanel.Dock"Left" and HorizontalAlignement="Strech" ensures some length of ListBox than RichtTextBox -->
+    
+    </Grid>
+    
+</UserControl>
