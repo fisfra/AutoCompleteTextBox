@@ -656,8 +656,12 @@ namespace WPFUserControl
 
         private void ChangeVisiblity(Visibility visibility)
         {
-            // workaround since it looks like the visblity event is not fired always
+            // workaround 1 since it looks like the visblity event is not fired always
             _lbAutoComplete.Visibility = visibility;
+
+            // workaround 2 - there is some refresh problem on TabItems (applying to the second TabItem),
+            // so IsOpen needs to be set twice to refresh
+            _listBoxPopUp.IsOpen = (visibility != Visibility.Visible);
             _listBoxPopUp.IsOpen = (visibility == Visibility.Visible);
         }
         #endregion
