@@ -97,7 +97,6 @@ namespace WPFUserControl
 
                 UpdateAutoCompleteListBox(foundObject, AutoCompletePosition);
             }
-
             // text was not found to autocomplete
             else
             {
