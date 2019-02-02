@@ -22,9 +22,11 @@
 
         <DockPanel>
             <!-- Popup ensure that ListBox is on top of other UI Elements -->
-            <Popup Name="ListBoxPopUp" IsOpen="True" PlacementTarget="{Binding ElementName = rtbText }" Placement="Bottom" AllowsTransparency = "True" PopupAnimation = "None" StaysOpen="False">
+            <!-- On of the Popup properties below causes a hang when the host application starts - to clue why -->
+            <!-- AllowsTransparency = "True" PopupAnimation = "None" StaysOpen="False"> -->            
+            <Popup Name="ListBoxPopUp" IsOpen="False" PlacementTarget="{Binding ElementName = rtbText }" Placement="Bottom"> 
                 <ListBox x:Name="lbAutoComplete" HorizontalAlignment="Stretch" Height="100" Margin="0,22,0,0" VerticalAlignment="Top" Visibility="Hidden" SelectionChanged="lbAutoComplete_SelectionChanged"
-                         PreviewKeyDown="lbAutoComplete_PreviewKeyDown" Width="{Binding Path=AutoCompleteWidth, ElementName=LayoutRoot}" DockPanel.Dock="Left" IsVisibleChanged="LbAutoComplete_IsVisibleChanged"/>
+                         PreviewKeyDown="lbAutoComplete_PreviewKeyDown" Width="{Binding Path=AutoCompleteWidth, ElementName=LayoutRoot}" DockPanel.Dock="Left"/>
             </Popup>
         </DockPanel>
         <!-- DockPanel with DockPanel.Dock"Left" and HorizontalAlignement="Strech" ensures some length of ListBox than RichtTextBox -->

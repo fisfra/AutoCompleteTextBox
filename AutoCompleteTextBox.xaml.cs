@@ -326,13 +326,5 @@ namespace WPFUserControl
                     break;
             }
         }
-
-        private void LbAutoComplete_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            Console.WriteLine("*** LbAutoComplete_IsVisibleChanged " + lbAutoComplete.Visibility.ToString());
-
-            // popup ensures that the ListBox is on top of other UI Elements
-            //ListBoxPopUp.IsOpen = lbAutoComplete.Visibility == Visibility.Visible;
-        }
     }
 }
