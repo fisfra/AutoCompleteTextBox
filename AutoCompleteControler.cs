@@ -162,6 +162,44 @@ namespace WPFUserControl
             _richTextBox.CaretPosition = txtPtr;
         }
 
+        public bool SelectKey(string key)
+        {
+            // *** Work in process ***
+
+            var index = _searchPool.FindIndex(t => t.Item1 == key);
+
+            if (index != -1)
+            {
+                // 
+                //_runEnteredText.Text = key;
+                //_runAutoCompleteText.Text = string.Empty;
+
+                // move cursor to end of text
+                //_richTextBox.CaretPosition = _richTextBox.Document.ContentEnd;
+
+                
+
+                // search in the autocomplete list
+                List<Tuple<string, object>> foundObject = FindObjects(key);
+
+                //AutoCompletePosition = 0;
+                AutoCompletePosition = index;
+                SetAutoCompleteString(foundObject[AutoCompletePosition].Item1);
+
+                // select current item
+                _lbAutoComplete.SelectedIndex = AutoCompletePosition;
+
+                // move cursor to end of text
+                _richTextBox.CaretPosition = _richTextBox.Document.ContentEnd;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool IsInSearchpool(string key, object o)
         {
             return _searchPool.Contains(new Tuple<string, object>(key, o));
@@ -335,7 +373,6 @@ namespace WPFUserControl
 
                 // hide and clear the listbox
                 _lbAutoComplete.Items.Clear();
-                //_lbAutoComplete.Visibility = Visibility.Hidden;
                 ChangeVisiblity(Visibility.Hidden);
 
                 // autocomplete sucessfull
@@ -430,7 +467,6 @@ namespace WPFUserControl
 
             // hide and clear the listbox
             _lbAutoComplete.Items.Clear();
-            //_lbAutoComplete.Visibility = Visibility.Hidden;
             ChangeVisiblity(Visibility.Hidden);
 
             // reset the autocomplete position

@@ -184,6 +184,11 @@ namespace WPFUserControl
             rtbText.Focus();
         }
 
+        public bool SelectKey(string key)
+        {
+            return _acControler.SelectKey(key);
+        }
+
         public object GetCurrentObject()
         {
             return _acControler.GetCurrentObject();
