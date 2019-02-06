@@ -52,7 +52,8 @@ namespace WPFUserControl
         public static readonly DependencyProperty ListBoxReadOnlyDependency =
                                DependencyProperty.Register(c_AutoCompleteTextBoxListBoxReadOnlyPropertyName, typeof(bool), typeof(AutoCompleteTextBox),
                                                            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
-
+        
+        #region methods
         public string AutoCompleteWidth
         {
             get
@@ -104,29 +105,6 @@ namespace WPFUserControl
             _acControler.LeavingViaShift += _acControler_LeavingViaShift;
 
             rtbText.LostFocus += RtbText_LostFocus;
-        }
-
-        private void RtbText_LostFocus(object sender, RoutedEventArgs e)
-        {
-            // if clicked outside the listbox with the autocomplete entries, this is a lost of focus of the user control
-            // clicks inside the listbox is still inside the user control, even though it is outside the text box
-            Point mousePositon = Mouse.GetPosition(lbAutoComplete);
-            if ( (mousePositon.X > lbAutoComplete.ActualWidth) || (mousePositon.Y > lbAutoComplete.ActualHeight))
-            {
-                _acControler.HandleLostFocus();
-            }
-        }
-
-        private void _acControler_Leaving(object sender, AutoCompleteTextBoxControlEventArgs e)
-        {
-            AutoCompleteTextBoxControlEventArgs arg = new AutoCompleteTextBoxControlEventArgs(e.Object, e.Text);
-            OnLeaving(arg);
-        }
-
-        private void _acControler_LeavingViaShift(object sender, AutoCompleteTextBoxControlEventArgs e)
-        {
-            AutoCompleteTextBoxControlEventArgs arg = new AutoCompleteTextBoxControlEventArgs(e.Object,e.Text);
-            OnLeavingViaShift(arg);
         }
 
         public void ClearSearchPool()
@@ -199,6 +177,7 @@ namespace WPFUserControl
             return _acControler.GetCurrentText();
         }
 
+
         protected void OnObjectChanged(AutoCompleteTextBoxControlEventArgs e)
         {
             ObjectChangedEventHandler handler = ObjectChanged;
@@ -227,6 +206,30 @@ namespace WPFUserControl
             {
                 LeavingViaShift(this, e);
             }
+        }
+
+
+        private void RtbText_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // if clicked outside the listbox with the autocomplete entries, this is a lost of focus of the user control
+            // clicks inside the listbox is still inside the user control, even though it is outside the text box
+            Point mousePositon = Mouse.GetPosition(lbAutoComplete);
+            if ( (mousePositon.X > lbAutoComplete.ActualWidth) || (mousePositon.Y > lbAutoComplete.ActualHeight))
+            {
+                _acControler.HandleLostFocus();
+            }
+        }
+
+        private void _acControler_Leaving(object sender, AutoCompleteTextBoxControlEventArgs e)
+        {
+            AutoCompleteTextBoxControlEventArgs arg = new AutoCompleteTextBoxControlEventArgs(e.Object, e.Text);
+            OnLeaving(arg);
+        }
+
+        private void _acControler_LeavingViaShift(object sender, AutoCompleteTextBoxControlEventArgs e)
+        {
+            AutoCompleteTextBoxControlEventArgs arg = new AutoCompleteTextBoxControlEventArgs(e.Object,e.Text);
+            OnLeavingViaShift(arg);
         }
 
         private void _acControler_ObjectChanged(object sender, AutoCompleteTextBoxControlEventArgs e)
@@ -331,5 +334,6 @@ namespace WPFUserControl
                     break;
             }
         }
+        #endregion
     }
 }

@@ -86,13 +86,13 @@ namespace WPFUserControl
             _runEnteredText.Text = _textEntered;
 
             // show or hide list box depending on autocomplete entries
-            //_lbAutoComplete.Visibility = foundObject.Count > 0 ? Visibility.Visible : Visibility.Hidden;
             ChangeVisiblity(foundObject.Count > 0 ? Visibility.Visible : Visibility.Hidden);
 
             // text was found to autocomplete
             if (foundObject.Count > 0)
             {
                 AutoCompletePosition = 0;
+
                 SetAutoCompleteString(foundObject[AutoCompletePosition].Item1);
 
                 UpdateAutoCompleteListBox(foundObject, AutoCompletePosition);
@@ -114,7 +114,7 @@ namespace WPFUserControl
         public void CreateAutoCompleteText(string text, bool remove = false)
         {     
             // *** that needs most likely some refactoring since it's completed and partly redunant
-            // *** anways it looks like it works for now
+            // *** anyways it looks like it works for now
 
             // readonly means the use can only select from the entries of the listbox
             // check the constructor for more information about _actb.ListBoxReadOnly
@@ -138,7 +138,7 @@ namespace WPFUserControl
             else
             {
                 // remove not possible if there is not text entered
-                if (!((remove && (string.IsNullOrEmpty(_textEntered)))))
+                if (!((remove && string.IsNullOrEmpty(_textEntered))))
                 {
                     CreateAutoCompleteTextCore(text, remove);
                 }
@@ -164,33 +164,34 @@ namespace WPFUserControl
 
         public bool SelectKey(string key)
         {
-            // *** Work in process ***
-
             var index = _searchPool.FindIndex(t => t.Item1 == key);
 
             if (index != -1)
             {
-                // 
-                //_runEnteredText.Text = key;
-                //_runAutoCompleteText.Text = string.Empty;
-
-                // move cursor to end of text
-                //_richTextBox.CaretPosition = _richTextBox.Document.ContentEnd;
-
-                
-
                 // search in the autocomplete list
                 List<Tuple<string, object>> foundObject = FindObjects(key);
 
-                //AutoCompletePosition = 0;
-                AutoCompletePosition = index;
-                SetAutoCompleteString(foundObject[AutoCompletePosition].Item1);
+                // consistency check
+                if (foundObject.Count != 1)
+                {
+                    Debug.Assert(false);
+                    throw new Exception("Invalid search pool in AutoCompleteControler::SelectKey");
+                }
 
-                // select current item
-                _lbAutoComplete.SelectedIndex = AutoCompletePosition;
+                // set the autocomplete string using the found object
+                SetAutoCompleteString(foundObject[0].Item1);
 
-                // move cursor to end of text
-                _richTextBox.CaretPosition = _richTextBox.Document.ContentEnd;
+                // set the position according to 0 (object found, so only one entry)
+                AutoCompletePosition = 0;
+
+                // update the listbox
+                UpdateAutoCompleteListBox(foundObject, AutoCompletePosition);
+
+                // update the preview object
+                UpdatePreviewObject();
+
+                // do the autocomplete
+                DoAutoComplete();
 
                 return true;
             }
