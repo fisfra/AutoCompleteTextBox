@@ -168,6 +168,9 @@ namespace WPFUserControl
 
             if (index != -1)
             {
+                // remove existing text
+                ClearText();
+
                 // search in the autocomplete list
                 List<Tuple<string, object>> foundObject = FindObjects(key);
 
