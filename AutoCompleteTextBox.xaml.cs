@@ -52,7 +52,26 @@ namespace WPFUserControl
         public static readonly DependencyProperty ListBoxReadOnlyDependency =
                                DependencyProperty.Register(c_AutoCompleteTextBoxListBoxReadOnlyPropertyName, typeof(bool), typeof(AutoCompleteTextBox),
                                                            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
-        
+
+        #region constructor
+        public AutoCompleteTextBox()
+        {
+            InitializeComponent();
+
+            runAutocompleteText.Foreground = autoCompleteForeground;
+            runAutocompleteText.Background = autoCompleteBackground;
+            rtbText.CaretBrush = cursorColor;
+
+            _acControler = new AutoCompleteControler(rtbText, lbAutoComplete, runEnteredText, runAutocompleteText, ListBoxPopUp, this);
+
+            _acControler.ObjectChanged += _acControler_ObjectChanged;
+            _acControler.Leaving += _acControler_Leaving;
+            _acControler.LeavingViaShift += _acControler_LeavingViaShift;
+
+            rtbText.LostFocus += RtbText_LostFocus;
+        }
+        #endregion
+
         #region methods
         public string AutoCompleteWidth
         {
@@ -88,23 +107,6 @@ namespace WPFUserControl
             {
                 SetValue(ListBoxReadOnlyDependency, value);
             }
-        }
-
-        public AutoCompleteTextBox()
-        {
-            InitializeComponent();
-
-            runAutocompleteText.Foreground = autoCompleteForeground;
-            runAutocompleteText.Background = autoCompleteBackground;
-            rtbText.CaretBrush = cursorColor;
-
-            _acControler = new AutoCompleteControler(rtbText, lbAutoComplete, runEnteredText, runAutocompleteText, ListBoxPopUp, this);
-
-            _acControler.ObjectChanged += _acControler_ObjectChanged;
-            _acControler.Leaving += _acControler_Leaving;
-            _acControler.LeavingViaShift += _acControler_LeavingViaShift;
-
-            rtbText.LostFocus += RtbText_LostFocus;
         }
 
         public void ClearSearchPool()
@@ -177,7 +179,6 @@ namespace WPFUserControl
             return _acControler.GetCurrentText();
         }
 
-
         protected void OnObjectChanged(AutoCompleteTextBoxControlEventArgs e)
         {
             ObjectChangedEventHandler handler = ObjectChanged;
@@ -207,7 +208,6 @@ namespace WPFUserControl
                 LeavingViaShift(this, e);
             }
         }
-
 
         private void RtbText_LostFocus(object sender, RoutedEventArgs e)
         {
